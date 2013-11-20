@@ -84,7 +84,19 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function(){
-      return false; // fixme
+
+      var counter = 0;
+
+      for (var i = 0; i < this.attributes.n; i++) {
+        var row = this.get(i);
+        for (var j = 0; j < this.attributes.n; j++) {
+          if(row[j]) {
+            counter++;
+          }
+        }
+      }
+
+      return (counter > 1) ? true : false;
     },
 
 
