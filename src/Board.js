@@ -76,7 +76,7 @@
 
     // ROWS - run from left to right
     // --------------------------------------------------------------
-    // 
+    //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex){
       return false; // fixme
@@ -130,15 +130,45 @@
 
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
-    // 
+    //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow){
-      return false; // fixme
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function(){
-      return false; // fixme
+      var len = this.attributes.n;
+
+      var checkDiagonal = function (prevRowIdx, previousIdx, len) {
+        var currentRowIdx = prevRowIdx + 1;
+        var idx = previousIdx + 1;
+
+        if (currentRowIdx >= len) {
+          return;
+        }
+
+        var rowToCheck = this.get(currentRowIdx);
+
+        for (idx; idx < len; idx++) {
+          if (rowToCheck[idx]) {
+            return true;
+          } else {
+            checkDiagonal.call(this, currentRowIdx, idx, len);
+          }
+        }
+
+        return false;
+      };
+
+      for (var currentRowIdx = 0; currentRowIdx < len; currentRowIdx++) {
+        for (var idx = 0; idx < len; idx++) {
+          if (this.get(currentRowIdx)[idx]) {
+            return checkDiagonal.call(this, currentRowIdx, idx, len);
+          }
+        }
+      }
+      return false;
     },
 
 
