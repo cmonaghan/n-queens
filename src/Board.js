@@ -175,7 +175,7 @@
 
     // Minor Diagonals - go from top-right to bottom-left
     // --------------------------------------------------------------
-    // 
+    //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow){
       return false; // fixme
@@ -183,7 +183,38 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function(){
-      return false; // fixme
+      var len = this.attributes.n;
+
+      var checkDiagonal = function (prevRowIdx, previousIdx, len) {
+        var currentRowIdx = prevRowIdx + 1;
+        var idx = previousIdx - 1;
+
+        if (currentRowIdx >= len) {
+          return;
+        }
+
+        var rowToCheck = this.get(currentRowIdx);
+
+        for (idx; idx >= 0; idx--) {
+          if (rowToCheck[idx]) {
+            return true;
+          } else {
+            return checkDiagonal.call(this, currentRowIdx, idx, len);
+          }
+        }
+
+        return false;
+      };
+
+      for (var currentRowIdx = 0; currentRowIdx < len; currentRowIdx++) {
+        for (var idx = len - 1; idx >= 0; idx--) {
+          if (this.get(currentRowIdx)[idx]) {
+            return checkDiagonal.call(this, currentRowIdx, idx, len);
+          }
+        }
+      }
+
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
